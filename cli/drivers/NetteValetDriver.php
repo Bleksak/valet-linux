@@ -41,6 +41,15 @@ class NetteValetDriver extends ValetDriver
         return false;
     }
 
+    public function serveStaticFile($staticFilePath, $sitePath, $siteName, $uri): void
+    {
+        $path = $this->asActualFile($sitePath . '/www', $uri);
+        header('Content-Type: text/html');
+        header_remove('Content-Type');
+
+        header('X-Accel-Redirect: /' . VALET_STATIC_PREFIX . $path);
+    }
+
     /**
      * Get the fully resolved path to the application's front controller.
      *
@@ -138,7 +147,7 @@ class NetteValetDriver extends ValetDriver
     }
 
     /**
-     * Format the incoming site path as a "public/index.php" file path.
+     * Format the incoming site path as a "www/index.php" file path.
      *
      * @param string $sitePath
      * @return string
@@ -149,7 +158,7 @@ class NetteValetDriver extends ValetDriver
     }
 
     /**
-     * Format the incoming site path as a "public/index.php" file path.
+     * Format the incoming site path as a "www/index.php" file path.
      *
      * @param string $sitePath
      * @return string
